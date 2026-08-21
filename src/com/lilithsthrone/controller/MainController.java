@@ -2834,7 +2834,9 @@ public class MainController implements Initializable {
 	}
 	
 	
-	private boolean useJavascriptToSetContent = true;
+	// EXPERIMENT: false routes all WebView content through the canonical WebEngine.loadContent(...)
+	// instead of the legacy executeScript("document.write(...)") hack that crashes newer WebKit.
+	private boolean useJavascriptToSetContent = false;
 	
 	private void setWebEngineContent(WebEngine engine, String content) {
 		content=content.replaceAll("[\r\n]", "");
@@ -2883,11 +2885,10 @@ public class MainController implements Initializable {
 			content = "<div class='tooltip-animation' style='width: 100%;'>" + content + "</div>";
 		}
 		content = "<div id='sizing-box' style='width: 100%;'>" + content + "</div>";
-		if(useJavascriptToSetContent) {
-			setWebEngineContent(webEngineTooltip, content);
-		} else {
-			webEngineTooltip.loadContent(content);
-		}
+		// The tooltip needs its content set synchronously so scrollHeight can be measured on the
+		// next line; loadContent is async (sizing-box would still be null). The other panels use
+		// loadContent, so this write-then-measure on the separate, hidden tooltip webview is safe.
+		setWebEngineContent(webEngineTooltip, content);
 		int height = 0;
 		try {
 			// add 8 + 8 to account for the top + bottom margins

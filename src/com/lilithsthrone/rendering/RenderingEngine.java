@@ -1566,6 +1566,11 @@ public enum RenderingEngine {
 	}
 	
 	public static GameCharacter getCharacterToRender() {
+		// Async loadContent can fire a panel's load-completed handler before a dialogue node exists
+		// (e.g. on the main menu, or mid new-game setup) — nothing to render in that case.
+		if(Main.game==null || Main.game.getCurrentDialogueNode()==null) {
+			return null;
+		}
 		if(Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.CHARACTERS_PRESENT || Main.game.getCurrentDialogueNode() == PhoneDialogue.CONTACTS_CHARACTER) {
 			return (NPC) CharactersPresentDialogue.characterViewed;
 		}
