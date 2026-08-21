@@ -119,14 +119,14 @@ public abstract class AbstractCoreItem implements XMLSaving {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof AbstractCoreItem){
-			if(((AbstractCoreItem)o).getName().equals(this.getName())
-				&& ((AbstractCoreItem)o).getColours().equals(this.getColours())
-				&& ((AbstractCoreItem)o).getRarity() == this.getRarity()
-				&& ((AbstractCoreItem)o).getAttributeModifiers().equals(this.getAttributeModifiers())
-				&& ((AbstractCoreItem)o).getEnchantmentEffect() == getEnchantmentEffect()
-				&& ((AbstractCoreItem)o).getEnchantmentItemType(null) == getEnchantmentItemType(null)
-				&& ((AbstractCoreItem)o).getItemTags().equals(getItemTags())){
+		if(o instanceof AbstractCoreItem other){
+			if(other.getName().equals(this.getName())
+				&& other.getColours().equals(this.getColours())
+				&& other.getRarity() == this.getRarity()
+				&& other.getAttributeModifiers().equals(this.getAttributeModifiers())
+				&& other.getEnchantmentEffect() == getEnchantmentEffect()
+				&& other.getEnchantmentItemType(null) == getEnchantmentItemType(null)
+				&& other.getItemTags().equals(getItemTags())){
 					return true;
 			}
 		}

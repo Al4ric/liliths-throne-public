@@ -121,11 +121,11 @@ public class FluidGirlCum implements FluidInterface {
 
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof FluidGirlCum){
-			if(((FluidGirlCum)o).getType().equals(this.getType())
-				&& ((FluidGirlCum)o).getFlavour() == this.getFlavour()
-				&& ((FluidGirlCum)o).getFluidModifiers().equals(this.getFluidModifiers())
-				&& ((FluidGirlCum)o).getTransformativeEffects().equals(this.getTransformativeEffects())){
+		if(o instanceof FluidGirlCum other){
+			if(other.getType().equals(this.getType())
+				&& other.getFlavour() == this.getFlavour()
+				&& other.getFluidModifiers().equals(this.getFluidModifiers())
+				&& other.getTransformativeEffects().equals(this.getTransformativeEffects())){
 					return true;
 			}
 		}

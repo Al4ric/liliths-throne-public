@@ -54,11 +54,11 @@ public class TattooWriting implements XMLSaving {
 	@Override
 	public boolean equals(Object o) {
 		if(super.equals(o)) {
-			return (o instanceof TattooWriting)
-					&& ((TattooWriting)o).getText().equals(this.getText())
-					&& ((TattooWriting)o).getColour().equals(this.getColour())
-					&& ((TattooWriting)o).isGlow()==glow
-					&& ((TattooWriting)o).getStyles().equals(this.getStyles());
+			return (o instanceof TattooWriting other)
+					&& other.getText().equals(this.getText())
+					&& other.getColour().equals(this.getColour())
+					&& other.isGlow()==glow
+					&& other.getStyles().equals(this.getStyles());
 		} else {
 			return false;
 		}

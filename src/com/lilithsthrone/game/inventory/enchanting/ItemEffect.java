@@ -69,13 +69,13 @@ public class ItemEffect implements XMLSaving {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof ItemEffect){
-			if((((ItemEffect)o).getItemEffectType()==null && itemEffectType==null
-					||((ItemEffect)o).getItemEffectType()!=null && ((ItemEffect)o).getItemEffectType().equals(itemEffectType))
-				&& ((ItemEffect)o).getPrimaryModifier() == primaryModifier
-				&& ((ItemEffect)o).getSecondaryModifier() == secondaryModifier
-				&& ((ItemEffect)o).getPotency() == potency
-				&& ((ItemEffect)o).getLimit() == limit){
+		if(o instanceof ItemEffect other){
+			if((other.getItemEffectType()==null && itemEffectType==null
+					||other.getItemEffectType()!=null && other.getItemEffectType().equals(itemEffectType))
+				&& other.getPrimaryModifier() == primaryModifier
+				&& other.getSecondaryModifier() == secondaryModifier
+				&& other.getPotency() == potency
+				&& other.getLimit() == limit){
 					return true;
 			}
 		}

@@ -52,9 +52,9 @@ public abstract class AbstractItem extends AbstractCoreItem implements XMLSaving
 	@Override
 	public boolean equals(Object o) {
 		if(super.equals(o)) {
-			return (o instanceof AbstractItem)
-					&& ((AbstractItem)o).getItemType().equals(itemType)
-					&& ((AbstractItem)o).getEffects().equals(itemEffects);
+			return (o instanceof AbstractItem other)
+					&& other.getItemType().equals(itemType)
+					&& other.getEffects().equals(itemEffects);
 		} else {
 			return false;
 		}

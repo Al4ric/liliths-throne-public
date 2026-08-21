@@ -57,9 +57,9 @@ public class Vector2i {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof Vector2i){
-			if(((Vector2i)o).getX() == x
-				&& ((Vector2i)o).getY() == y){
+		if(o instanceof Vector2i other){
+			if(other.getX() == x
+				&& other.getY() == y){
 					return true;
 			}
 		}

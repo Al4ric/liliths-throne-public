@@ -45,10 +45,10 @@ public class Addiction implements XMLSaving {
 	@Override
 	public boolean equals(Object o) {
 		if(super.equals(o)) {
-			return (o instanceof Addiction)
-					&& ((Addiction)o).getFluid().equals(this.getFluid())
-					&& ((Addiction)o).getLastTimeSatisfied() == this.getLastTimeSatisfied()
-					&& ((Addiction)o).getProviderIDs().equals(this.getProviderIDs());
+			return (o instanceof Addiction other)
+					&& other.getFluid().equals(this.getFluid())
+					&& other.getLastTimeSatisfied() == this.getLastTimeSatisfied()
+					&& other.getProviderIDs().equals(this.getProviderIDs());
 		} else {
 			return false;
 		}

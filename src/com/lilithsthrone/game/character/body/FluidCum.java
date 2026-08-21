@@ -119,11 +119,11 @@ public class FluidCum implements FluidInterface {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof FluidCum){
-			if(((FluidCum)o).getType().equals(this.getType())
-				&& ((FluidCum)o).getFlavour() == this.getFlavour()
-				&& ((FluidCum)o).getFluidModifiers().equals(this.getFluidModifiers())
-				&& ((FluidCum)o).getTransformativeEffects().equals(this.getTransformativeEffects())){
+		if(o instanceof FluidCum other){
+			if(other.getType().equals(this.getType())
+				&& other.getFlavour() == this.getFlavour()
+				&& other.getFluidModifiers().equals(this.getFluidModifiers())
+				&& other.getTransformativeEffects().equals(this.getTransformativeEffects())){
 					return true;
 			}
 		}

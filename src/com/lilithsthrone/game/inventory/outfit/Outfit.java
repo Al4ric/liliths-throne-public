@@ -66,13 +66,13 @@ public class Outfit implements XMLSaving {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof Outfit){
-			if(((Outfit)o).gameCreationID == gameCreationID
-					&& ((Outfit)o).getName().equals(name)
-					&& ((Outfit)o).getWeapons().equals(weapons)
-					&& ((Outfit)o).getClothing().equals(clothing)
-					&& Objects.equals(((Outfit)o).iconSlotPriority, iconSlotPriority)
-					&& ((Outfit)o).getIgnoredSlots().equals(ignoredSlots)){
+		if(o instanceof Outfit other){
+			if(other.gameCreationID == gameCreationID
+					&& other.getName().equals(name)
+					&& other.getWeapons().equals(weapons)
+					&& other.getClothing().equals(clothing)
+					&& Objects.equals(other.iconSlotPriority, iconSlotPriority)
+					&& other.getIgnoredSlots().equals(ignoredSlots)){
 					return true;
 			}
 		}

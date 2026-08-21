@@ -272,15 +272,15 @@ public class AbstractTattooType extends AbstractCoreType {
 	@Override
 	public boolean equals(Object o) {
 		if(super.equals(o)) {
-			return (o instanceof AbstractTattooType)
-					&& ((AbstractTattooType)o).isMod()==isMod
-					&& ((AbstractTattooType)o).getSlotAvailability().equals(this.getSlotAvailability())
-					&& ((AbstractTattooType)o).getName().equals(this.getName())
-					&& ((AbstractTattooType)o).getDescription().equals(this.getDescription())
-					&& ((AbstractTattooType)o).getAvailablePrimaryColours().equals(this.getAvailablePrimaryColours())
-					&& ((AbstractTattooType)o).getAvailableSecondaryColours().equals(this.getAvailableSecondaryColours())
-					&& ((AbstractTattooType)o).getAvailableTertiaryColours().equals(this.getAvailableTertiaryColours())
-					&& ((AbstractTattooType)o).getPathName().equals(this.getPathName());
+			return (o instanceof AbstractTattooType other)
+					&& other.isMod()==isMod
+					&& other.getSlotAvailability().equals(this.getSlotAvailability())
+					&& other.getName().equals(this.getName())
+					&& other.getDescription().equals(this.getDescription())
+					&& other.getAvailablePrimaryColours().equals(this.getAvailablePrimaryColours())
+					&& other.getAvailableSecondaryColours().equals(this.getAvailableSecondaryColours())
+					&& other.getAvailableTertiaryColours().equals(this.getAvailableTertiaryColours())
+					&& other.getPathName().equals(this.getPathName());
 		} else {
 			return false;
 		}

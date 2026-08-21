@@ -134,9 +134,9 @@ public abstract class AbstractPerk {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof AbstractPerk) {
-			if(((AbstractPerk)o).getName(null).equals(this.getName(null))
-					&& ((AbstractPerk)o).getAttributeModifiers(null) == this.getAttributeModifiers(null)){
+		if(o instanceof AbstractPerk other) {
+			if(other.getName(null).equals(this.getName(null))
+					&& other.getAttributeModifiers(null) == this.getAttributeModifiers(null)){
 				return true;
 			}
 		}

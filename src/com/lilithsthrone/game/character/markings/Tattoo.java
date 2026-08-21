@@ -156,15 +156,15 @@ public class Tattoo extends AbstractCoreItem implements XMLSaving {
 	@Override
 	public boolean equals(Object o) {
 		if(super.equals(o)) {
-			return (o instanceof Tattoo)
-					&& ((Tattoo)o).getType()==type
-					&& ((Tattoo)o).getPrimaryColour()==primaryColour
-					&& ((Tattoo)o).getPrimaryColour()==secondaryColour
-					&& ((Tattoo)o).getPrimaryColour()==tertiaryColour
-					&& ((Tattoo)o).isGlowing()==glowing
-					&& ((Tattoo)o).getWriting().equals(this.getWriting())
-					&& ((Tattoo)o).getCounter().equals(this.getCounter())
-					&& ((Tattoo)o).getEffects().equals(this.getEffects());
+			return (o instanceof Tattoo other)
+					&& other.getType()==type
+					&& other.getPrimaryColour()==primaryColour
+					&& other.getPrimaryColour()==secondaryColour
+					&& other.getPrimaryColour()==tertiaryColour
+					&& other.isGlowing()==glowing
+					&& other.getWriting().equals(this.getWriting())
+					&& other.getCounter().equals(this.getCounter())
+					&& other.getEffects().equals(this.getEffects());
 		} else {
 			return false;
 		}

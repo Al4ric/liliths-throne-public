@@ -125,11 +125,11 @@ public class FluidMilk implements FluidInterface {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o instanceof FluidMilk){
-			if(((FluidMilk)o).getType().equals(this.getType())
-				&& ((FluidMilk)o).getFlavour() == this.getFlavour()
-				&& ((FluidMilk)o).getFluidModifiers().equals(this.getFluidModifiers())
-				&& ((FluidMilk)o).getTransformativeEffects().equals(this.getTransformativeEffects())){
+		if(o instanceof FluidMilk other){
+			if(other.getType().equals(this.getType())
+				&& other.getFlavour() == this.getFlavour()
+				&& other.getFluidModifiers().equals(this.getFluidModifiers())
+				&& other.getTransformativeEffects().equals(this.getTransformativeEffects())){
 					return true;
 			}
 		}

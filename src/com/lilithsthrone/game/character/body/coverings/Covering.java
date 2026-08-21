@@ -510,14 +510,14 @@ public class Covering implements XMLSaving {
 	@Override
 	public boolean equals(Object o) {
 //		if(super.equals(o)){
-			if(o instanceof Covering){
-				if(((Covering)o).getType() == type
-						&& ((Covering)o).getPattern() == pattern
-						&& ((Covering)o).getModifier() == modifier
-						&& ((Covering)o).getPrimaryColour() == primaryColour
-						&& ((Covering)o).isPrimaryGlowing() == primaryGlowing
-						&& ((Covering)o).getSecondaryColour() == secondaryColour
-						&& ((Covering)o).isSecondaryGlowing() == secondaryGlowing){
+			if(o instanceof Covering other){
+				if(other.getType() == type
+						&& other.getPattern() == pattern
+						&& other.getModifier() == modifier
+						&& other.getPrimaryColour() == primaryColour
+						&& other.isPrimaryGlowing() == primaryGlowing
+						&& other.getSecondaryColour() == secondaryColour
+						&& other.isSecondaryGlowing() == secondaryGlowing){
 					return true;
 				}
 			}

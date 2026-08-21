@@ -363,19 +363,19 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 	 */
 	public boolean equalsWithoutEquippedSlot(Object o) {
 		if(super.equals(o)){
-			if(o instanceof AbstractClothing){
-				if(((AbstractClothing)o).getClothingType().equals(getClothingType())
-						&& ((AbstractClothing)o).getColours().equals(getColours())
-						&& ((AbstractClothing)o).getPattern().equals(getPattern())
+			if(o instanceof AbstractClothing other){
+				if(other.getClothingType().equals(getClothingType())
+						&& other.getColours().equals(getColours())
+						&& other.getPattern().equals(getPattern())
 						&& (this.getPattern()!="none"
-							?((AbstractClothing)o).getPatternColours().equals(getPatternColours())
+							?other.getPatternColours().equals(getPatternColours())
 							:true)
-						&& ((AbstractClothing)o).isSealed()==this.isSealed()
-						&& ((AbstractClothing)o).isDirty()==this.isDirty()
-						&& ((AbstractClothing)o).isEnchantmentKnown()==this.isEnchantmentKnown()
-						&& Objects.equals(((AbstractClothing)o).getHiddenName(), this.getHiddenName())
-						&& ((AbstractClothing)o).isBadEnchantment()==this.isBadEnchantment()
-						&& ((AbstractClothing)o).getEffects().equals(this.getEffects())
+						&& other.isSealed()==this.isSealed()
+						&& other.isDirty()==this.isDirty()
+						&& other.isEnchantmentKnown()==this.isEnchantmentKnown()
+						&& Objects.equals(other.getHiddenName(), this.getHiddenName())
+						&& other.isBadEnchantment()==this.isBadEnchantment()
+						&& other.getEffects().equals(this.getEffects())
 						){
 					return true;
 				}

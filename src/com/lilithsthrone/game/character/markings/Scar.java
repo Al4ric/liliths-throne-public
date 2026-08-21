@@ -24,9 +24,9 @@ public class Scar implements XMLSaving {
 	@Override
 	public boolean equals(Object o) {
 		if(super.equals(o)) {
-			return (o instanceof Scar)
-					&& ((Scar)o).getType()==type
-					&& ((Scar)o).isPlural()==plural;
+			return (o instanceof Scar other)
+					&& other.getType()==type
+					&& other.isPlural()==plural;
 		} else {
 			return false;
 		}

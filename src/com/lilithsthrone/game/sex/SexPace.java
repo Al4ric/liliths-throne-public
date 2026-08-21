@@ -28,21 +28,14 @@ public enum SexPace {
 	}
 	
 	public SexPace getOppositeDomEquivalent() {
-		switch(this) {
-			case DOM_GENTLE:
-				return SUB_NORMAL;
-			case DOM_NORMAL:
-				return SUB_NORMAL;
-			case DOM_ROUGH:
-				return SUB_EAGER;
-			case SUB_EAGER:
-				return DOM_ROUGH;
-			case SUB_NORMAL:
-				return DOM_NORMAL;
-			case SUB_RESISTING:
-				return DOM_GENTLE;
-		}
-		return SUB_NORMAL;
+		return switch(this) {
+			case DOM_GENTLE -> SUB_NORMAL;
+			case DOM_NORMAL -> SUB_NORMAL;
+			case DOM_ROUGH -> SUB_EAGER;
+			case SUB_EAGER -> DOM_ROUGH;
+			case SUB_NORMAL -> DOM_NORMAL;
+			case SUB_RESISTING -> DOM_GENTLE;
+		};
 	}
 	
 	public boolean isDom() {

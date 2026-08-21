@@ -60,12 +60,12 @@ public class TattooCounter implements XMLSaving {
 	@Override
 	public boolean equals(Object o) {
 		if(super.equals(o)) {
-			return (o instanceof TattooCounter)
-					&& ((TattooCounter)o).getType().equals(this.getType())
-					&& ((TattooCounter)o).getCountType().equals(this.getCountType())
-					&& ((TattooCounter)o).getColour().equals(this.getColour())
-					&& ((TattooCounter)o).isGlow()==glow
-					&& ((TattooCounter)o).getRetroactiveApplicationOffset()==this.getRetroactiveApplicationOffset();
+			return (o instanceof TattooCounter other)
+					&& other.getType().equals(this.getType())
+					&& other.getCountType().equals(this.getCountType())
+					&& other.getColour().equals(this.getColour())
+					&& other.isGlow()==glow
+					&& other.getRetroactiveApplicationOffset()==this.getRetroactiveApplicationOffset();
 		} else {
 			return false;
 		}
