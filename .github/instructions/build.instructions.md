@@ -16,8 +16,11 @@ applyTo: "{pom.xml,build.ps1,run.ps1,test.ps1,dev.ps1,mvnw,mvnw.cmd}"
   via `<testSourceDirectory>`.
 - `maven.compiler.release = 25` on JDK 25 (via the `jdk25` profile; `jdk17`/`jdk21` profiles
   set the matching release when building on those JDKs). Default property fallback is 11.
-- JavaFX (`org.openjfx` 21.x, platform classifier) and Nashorn (`org.openjdk.nashorn:nashorn-core`)
-  come from Maven Central (profiles activated on JDK 11+).
+- JavaFX (`org.openjfx` 18.0.2, platform classifier) and Nashorn (`org.openjdk.nashorn:nashorn-core`)
+  come from Maven Central (profiles activated on JDK 11+). NOTE: JavaFX is deliberately pinned to
+  18.0.2 — JavaFX 19-25's WebKit has a native regression (`WebPage.twkProcessMouseEvent` NPE spam on
+  every mouse move over the game WebView) when JavaFX is loaded from the classpath. 18.0.2 runs fine
+  on JDK 25. Don't bump JavaFX without GUI-testing WebView mouse interaction (see build memory).
 - `res/` is copied into `target/Lilith's Throne (<platform>)/res` during `package`; it is large
   (~5,500 files) — the dev loop deliberately skips it.
 
