@@ -75,7 +75,16 @@ public class Main extends Application {
 
 	public static TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	private static DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-	private static DocumentBuilder docBuilder;
+	// DocumentBuilder is not thread-safe and world generation parses XML from a parallelStream; give each thread its own.
+	private static final ThreadLocal<DocumentBuilder> docBuilder = ThreadLocal.withInitial(() -> {
+		try {
+			synchronized (docFactory) {
+				return docFactory.newDocumentBuilder();
+			}
+		} catch (ParserConfigurationException e) {
+			throw new IllegalStateException("Failed to create DocumentBuilder", e);
+		}
+	});
 
 	public static MainController mainController;
 
@@ -612,14 +621,7 @@ public class Main extends Application {
 	}
 
 	public static DocumentBuilder getDocBuilder() {
-		if (docBuilder == null) {
-			try {
-				docBuilder = docFactory.newDocumentBuilder();
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			}
-		}
-		return docBuilder;
+		return docBuilder.get();
 	}
 
 	public static String getPatchNotes() {

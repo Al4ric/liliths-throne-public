@@ -82,8 +82,8 @@ Heavy work at startup:
   `#IF(...)`, `#ELSEIF(...)`, `#ELSE`, and inline JavaScript with bindings such as
   `game`, `pc`, `npc`, `flags`.
 - `UtilText` compiles/evaluates these via Nashorn (`initScriptEngine`, `parse`).
-- The Nashorn import (`jdk.nashorn` vs `org.openjdk.nashorn`) is swapped by the Maven `antrun`
-  plugin depending on JDK — never hand-edit it (see build instructions).
+- `UtilText.java` imports `org.openjdk.nashorn.*` directly (committed; JDK-17-only). The old
+  antrun import-swap and isolated-worktree build were removed — builds run in-workspace via `./mvnw`.
 - Because scripting is pervasive across hundreds of files, replacing Nashorn is a large,
   high-risk effort; it must be guarded by dialogue/text snapshot tests before any attempt.
 
