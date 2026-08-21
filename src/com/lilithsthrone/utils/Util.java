@@ -123,8 +123,11 @@ public class Util {
 	public static String inputStreamToString(InputStream is) {
 		if (is == null)
 			return "";
-		try (java.util.Scanner s = new java.util.Scanner(is)) {
-			return s.useDelimiter("\\A").hasNext() ? s.next() : "";
+		try (is) {
+			return new String(is.readAllBytes());
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+			return "";
 		}
 	}
 	
