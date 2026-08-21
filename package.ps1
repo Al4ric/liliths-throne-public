@@ -74,9 +74,9 @@ Write-Host "Standalone (no JDK needed) -> $appDir\Lilith's Throne.exe"
 
 if ($Zip) {
     $version = ($jar.BaseName -replace '.*-', '')
-    $zip = "$dist\LilithsThrone-$version-win.zip"
-    Remove-Item $zip -Force -ErrorAction SilentlyContinue
+    $zipPath = "$dist\LilithsThrone-$version-win.zip"
+    Remove-Item $zipPath -Force -ErrorAction SilentlyContinue
     Write-Host "Zipping (this can take a while)..."
-    Compress-Archive -Path $appDir -DestinationPath $zip -CompressionLevel Optimal
-    Write-Host "Shareable zip -> $zip"
+    Compress-Archive -Path $appDir -DestinationPath $zipPath -CompressionLevel Optimal
+    Write-Host "Shareable zip -> $zipPath"
 }
