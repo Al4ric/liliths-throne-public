@@ -170,6 +170,18 @@ public class CMBasicAttack {
     	}
         
         @Override
+        protected int[] getDamagePredictionRange(GameCharacter source, GameCharacter target, boolean isCrit) {
+        	// Skip characters attacking with multiple weapons at once, as showing several ranges would be too crowded.
+        	if(Math.min(source.getArmRows(), source.getMainWeaponArray().length)!=1) {
+        		return new int[] {0, 0};
+        	}
+        	AbstractWeapon weapon = getMainWeapon(0, source, 0);
+        	int min = Attack.applyFinalDamageModifiers(source, target, Attack.getMinimumDamage(source, target, Attack.MAIN, weapon), isCrit);
+        	int max = Attack.applyFinalDamageModifiers(source, target, Attack.getMaximumDamage(source, target, Attack.MAIN, weapon), isCrit);
+        	return new int[] {min, max};
+        }
+        
+        @Override
         public Value<Boolean, String> isAvailableFromSpecialCase(GameCharacter source) {
             return new Value<>(true, "Available to everyone as a basic move.");
         }
@@ -540,6 +552,18 @@ public class CMBasicAttack {
     		}
             return damageType;
     	}
+        
+        @Override
+        protected int[] getDamagePredictionRange(GameCharacter source, GameCharacter target, boolean isCrit) {
+        	// Skip characters attacking with multiple weapons at once, as showing several ranges would be too crowded.
+        	if(Math.min(source.getArmRows(), source.getOffhandWeaponArray().length)!=1) {
+        		return new int[] {0, 0};
+        	}
+        	AbstractWeapon weapon = getOffhandWeapon(0, source, 0);
+        	int min = Attack.applyFinalDamageModifiers(source, target, Attack.getMinimumDamage(source, target, Attack.OFFHAND, weapon), isCrit);
+        	int max = Attack.applyFinalDamageModifiers(source, target, Attack.getMaximumDamage(source, target, Attack.OFFHAND, weapon), isCrit);
+        	return new int[] {min, max};
+        }
         
         @Override
         public Value<Boolean, String> isAvailableFromSpecialCase(GameCharacter source) {
@@ -1469,6 +1493,11 @@ public class CMBasicAttack {
         
         protected int getDamage(GameCharacter source, GameCharacter target) {
         	return Math.max(1, (int) (Attack.getModifiedDamage(source, target, Attack.SEDUCTION, null, DamageType.LUST, getBaseDamage(source))));
+        }
+
+        @Override
+        protected int getDamage(GameCharacter source, GameCharacter target, boolean isCrit) {
+        	return getDamage(source, target);
         }
 
         @Override

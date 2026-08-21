@@ -1018,7 +1018,7 @@ public class Combat {
 					if(Main.game.getPlayer().getEquippedMoves().size()>moveIndex) {
 						AbstractCombatMove move = Main.game.getPlayer().getEquippedMoves().get(moveIndex);
 						
-						return getMoveResponse(move, pcEnemies, pcAllies);
+						return getMoveResponse(move, pcEnemies, pcAllies, true);
 						
 					} else if(index<=8) {
 						return new Response("-",
@@ -1027,24 +1027,27 @@ public class Combat {
 					}
 					
 				} else if(responseTab==1) {
-					if(Main.game.getPlayer().getAvailableBasicMoves().size()>moveIndex) {
-						AbstractCombatMove move = Main.game.getPlayer().getAvailableBasicMoves().get(moveIndex);
+					List<AbstractCombatMove> basicMoves = getSortedMovesByDamage(Main.game.getPlayer().getAvailableBasicMoves(), pcEnemies, pcAllies);
+					if(basicMoves.size()>moveIndex) {
+						AbstractCombatMove move = basicMoves.get(moveIndex);
 						
-						return getMoveResponse(move, pcEnemies, pcAllies);
+						return getMoveResponse(move, pcEnemies, pcAllies, true);
 					}
 					
 				} else if(responseTab==2) {
-					if(Main.game.getPlayer().getAvailableSpecialMoves().size()>moveIndex) {
-						AbstractCombatMove move = Main.game.getPlayer().getAvailableSpecialMoves().get(moveIndex);
+					List<AbstractCombatMove> specialMoves = getSortedMovesByDamage(Main.game.getPlayer().getAvailableSpecialMoves(), pcEnemies, pcAllies);
+					if(specialMoves.size()>moveIndex) {
+						AbstractCombatMove move = specialMoves.get(moveIndex);
 						
-						return getMoveResponse(move, pcEnemies, pcAllies);
+						return getMoveResponse(move, pcEnemies, pcAllies, true);
 					}
 					
 				} else if(responseTab==3) {
-					if(Main.game.getPlayer().getAvailableSpellMoves().size()>moveIndex) {
-						AbstractCombatMove move = Main.game.getPlayer().getAvailableSpellMoves().get(moveIndex);
+					List<AbstractCombatMove> spellMoves = getSortedMovesByDamage(Main.game.getPlayer().getAvailableSpellMoves(), pcEnemies, pcAllies);
+					if(spellMoves.size()>moveIndex) {
+						AbstractCombatMove move = spellMoves.get(moveIndex);
 						
-						return getMoveResponse(move, pcEnemies, pcAllies);
+						return getMoveResponse(move, pcEnemies, pcAllies, true);
 					}
 					
 				} else if(responseTab==4) {
@@ -1296,6 +1299,25 @@ public class Combat {
 	};
 	
 	private Response getMoveResponse(AbstractCombatMove move, List<GameCharacter> pcEnemies, List<GameCharacter> pcAllies) {
+		return getMoveResponse(move, pcEnemies, pcAllies, false);
+	}
+
+	/**
+	 * @return The given moves sorted from highest to lowest predicted damage.
+	 */
+	private List<AbstractCombatMove> getSortedMovesByDamage(List<AbstractCombatMove> moves, List<GameCharacter> pcEnemies, List<GameCharacter> pcAllies) {
+		List<AbstractCombatMove> sortedMoves = new ArrayList<>(moves);
+		int selectedMoveIndex = Main.game.getPlayer().getSelectedMoves().size();
+		Map<AbstractCombatMove, Integer> damageByMove = new HashMap<>();
+		for(AbstractCombatMove move : sortedMoves) {
+			GameCharacter moveTarget = move.isCanTargetAllies()||move.isCanTargetSelf()?getTargetedAlliedCombatant():getTargetedCombatant();
+			damageByMove.put(move, move.getDamagePrediction(selectedMoveIndex, Main.game.getPlayer(), moveTarget, pcEnemies, pcAllies));
+		}
+		sortedMoves.sort((m1, m2) -> Integer.compare(damageByMove.get(m2), damageByMove.get(m1)));
+		return sortedMoves;
+	}
+
+	private Response getMoveResponse(AbstractCombatMove move, List<GameCharacter> pcEnemies, List<GameCharacter> pcAllies, boolean showDamageInTitle) {
 		GameCharacter moveTarget = move.isCanTargetAllies()||move.isCanTargetSelf()?getTargetedAlliedCombatant():getTargetedCombatant();
 
 		int selectedMoveIndex = Main.game.getPlayer().getSelectedMoves().size();
@@ -1325,7 +1347,15 @@ public class Combat {
 		
 		String predictionTooltip = move.getPrediction(selectedMoveIndex, Main.game.getPlayer(), moveTarget, pcEnemies, pcAllies);
 		
-		return new Response(Util.capitaliseSentence(move.getName(selectedMoveIndex, Main.game.getPlayer())),
+		String moveTitle = Util.capitaliseSentence(move.getName(selectedMoveIndex, Main.game.getPlayer()));
+		if(showDamageInTitle) {
+			String predictedDamage = move.getDamagePredictionString(selectedMoveIndex, Main.game.getPlayer(), moveTarget, pcEnemies, pcAllies);
+			if(!predictedDamage.isEmpty()) {
+				moveTitle += " ("+predictedDamage+")";
+			}
+		}
+		
+		return new Response(moveTitle,
 			moveStatblock.toString()
 				+ predictionTooltip
 				+ critText.toString(),

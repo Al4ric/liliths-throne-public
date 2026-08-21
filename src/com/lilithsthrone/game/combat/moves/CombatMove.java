@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.effects.AbstractStatusEffect;
 import com.lilithsthrone.game.character.effects.StatusEffect;
+import com.lilithsthrone.game.combat.Attack;
 import com.lilithsthrone.game.combat.DamageType;
 import com.lilithsthrone.game.combat.spells.Spell;
 import com.lilithsthrone.game.combat.spells.SpellSchool;
@@ -221,13 +222,25 @@ public class CombatMove {
 	            }
 	        	
 	            @Override
-	            public float getCritStatusEffectDurationMultiplier() {
-	            	return 2;
-	            }
-	
-	            @Override
-	            public Map<AbstractStatusEffect, Integer> getStatusEffects(GameCharacter caster, GameCharacter target, boolean isCritical) {
-	            	return getAssociatedSpell().getStatusEffects(caster, target, isCritical);
+            protected int[] getDamagePredictionRange(GameCharacter source, GameCharacter target, boolean isCrit) {
+            	Spell associatedSpell = getAssociatedSpell();
+            	if(target==null || associatedSpell.isBeneficial() || associatedSpell.getDamage(source)<=0) {
+            		return new int[] {0, 0};
+            	}
+            	DamageType dt = associatedSpell.getDamageType();
+            	int min = Math.round(Attack.getMinimumSpellDamage(source, target, dt, associatedSpell.getDamage(source), associatedSpell.getDamageVariance()));
+            	int max = Math.round(Attack.getMaximumSpellDamage(source, target, dt, associatedSpell.getDamage(source), associatedSpell.getDamageVariance()));
+            	return new int[] {min, max};
+            }
+        	
+            @Override
+            public float getCritStatusEffectDurationMultiplier() {
+            	return 2;
+            }
+
+            @Override
+            public Map<AbstractStatusEffect, Integer> getStatusEffects(GameCharacter caster, GameCharacter target, boolean isCritical) {
+            	return getAssociatedSpell().getStatusEffects(caster, target, isCritical);
 	            }
 	            
 	            @Override

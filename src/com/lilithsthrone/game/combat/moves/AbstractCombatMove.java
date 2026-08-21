@@ -963,6 +963,62 @@ public abstract class AbstractCombatMove {
         return (int) Attack.calculateSpecialAttackDamage(source, target, getType(), damageType, getBaseDamage(source), getDamageVariance(), isCrit);
     }
 
+    /**
+     * @return The predicted damage this move deals to the target, as a midpoint value used for sorting. Returns 0 if the move deals no damage.
+     */
+    public int getDamagePrediction(int turnIndex, GameCharacter source, GameCharacter target, List<GameCharacter> enemies, List<GameCharacter> allies) {
+    	if(target==null) {
+    		return 0;
+    	}
+    	int[] range = getDamagePredictionRange(source, target, canCrit(turnIndex, source, target, enemies, allies));
+        return (range[0]+range[1])/2;
+    }
+
+    /**
+     * @return The damage to show in a move button's title, either a single value ("12") or a range ("12-17") for moves with variable damage. Returns an empty string if the move deals no damage.
+     */
+    public String getDamagePredictionString(int turnIndex, GameCharacter source, GameCharacter target, List<GameCharacter> enemies, List<GameCharacter> allies) {
+    	if(target==null) {
+    		return "";
+    	}
+    	int[] range = getDamagePredictionRange(source, target, canCrit(turnIndex, source, target, enemies, allies));
+    	if(range[1]<=0) {
+    		return "";
+    	}
+    	if(range[0]==range[1]) {
+    		return String.valueOf(range[1]);
+    	}
+        return range[0]+"-"+range[1];
+    }
+
+    /**
+     * @return The predicted damage range {min, max} for this move, for UI display and sorting. Returns {0, 0} if the move deals no damage. Override in moves whose damage is variable in a bespoke way (e.g. weapon strikes or spells).
+     */
+    protected int[] getDamagePredictionRange(GameCharacter source, GameCharacter target, boolean isCrit) {
+    	int mid = getDamage(source, target, isCrit);
+    	if(mid<=0) {
+    		return new int[] {mid, mid};
+    	}
+    	if(getBaseDamage(source)>0 && getDamageVariance()!=DamageVariance.NONE) {
+            DamageType damageType = getDamageType(0, source);
+            int min = (int) Attack.calculateSpecialAttackDamage(source, target, getType(), damageType, getBaseDamage(source), getDamageVariance(), isCrit, 0.0);
+            int max = (int) Attack.calculateSpecialAttackDamage(source, target, getType(), damageType, getBaseDamage(source), getDamageVariance(), isCrit, 1.0);
+            return new int[] {min, max};
+    	}
+    	return new int[] {mid, mid};
+    }
+
+    /**
+     * Deterministic (non-random) damage estimate used by {@link #getDamagePredictionRange}. Override in moves that compute damage in a bespoke way (e.g. seduction teases). Returns 0 if this move deals no damage.
+     */
+    protected int getDamage(GameCharacter source, GameCharacter target, boolean isCrit) {
+    	if(getBaseDamage(source)==0) {
+    		return 0;
+    	}
+        DamageType damageType = getDamageType(0, source);
+        return (int) Attack.calculateSpecialAttackDamage(source, target, getType(), damageType, getBaseDamage(source), getDamageVariance(), isCrit, 0.5);
+    }
+
 	public DamageVariance getDamageVariance() {
 		return damageVariance;
 	}

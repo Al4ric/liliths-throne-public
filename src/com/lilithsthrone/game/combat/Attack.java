@@ -191,6 +191,13 @@ public enum Attack {
 	}
 
 	public static int calculateSpecialAttackDamage(GameCharacter attacker, GameCharacter defender, CombatMoveType combatMoveType, DamageType damageType, float damage, DamageVariance damageVariance, boolean critical) {
+		return calculateSpecialAttackDamage(attacker, defender, combatMoveType, damageType, damage, damageVariance, critical, Math.random());
+	}
+
+	/**
+	 * @param varianceRoll A value in the range [0, 1] determining where in the min-max damage range the result falls. Pass a fixed value (such as 0.5) for a deterministic result, or Math.random() for a random roll.
+	 */
+	public static int calculateSpecialAttackDamage(GameCharacter attacker, GameCharacter defender, CombatMoveType combatMoveType, DamageType damageType, float damage, DamageVariance damageVariance, boolean critical, double varianceRoll) {
 		float minimumDamage = getMinimumSpecialAttackDamage(attacker, defender, combatMoveType, damageType, damage, damageVariance);
 		float maximumDamage = getMaximumSpecialAttackDamage(attacker, defender, combatMoveType, damageType, damage, damageVariance);
 
@@ -199,7 +206,7 @@ public enum Attack {
 		
 		// Add variation:
 		if (difference > 0) {
-			finalDamage += Math.random()*difference;
+			finalDamage += varianceRoll*difference;
 		}
 
 		// Is critical:
