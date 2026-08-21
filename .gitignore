@@ -20,3 +20,4 @@ dependency-reduced-pom.xml
 
 # Ignore all generic character images
 res/images/characters/generic/
+res/mods/nhom/
