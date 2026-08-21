@@ -896,12 +896,14 @@ public class Game implements XMLSaving {
 			Main.game.addEvent(new EventLogEntry("<style='color:"+PresetColour.GENERIC_TERRIBLE.toWebHexString()+";'>Partial Save Fail<b>", "playerCharacter failure"), false);
 		}
 
-		// Add all NPCs:
+		// Add all NPCs (id-sorted so save output is deterministic despite parallel-load map ordering):
 		try {
-			for(GameCharacter character : Main.game.getNPCMap().values()) {
+			List<String> npcIds = new ArrayList<>(Main.game.getNPCMap().keySet());
+			npcIds.sort(null);
+			for(String npcId : npcIds) {
 				Element characterNode = doc.createElement("NPC");
 				game.appendChild(characterNode);
-				character.saveAsXML(characterNode, doc);
+				Main.game.getNPCMap().get(npcId).saveAsXML(characterNode, doc);
 			}
 		} catch(Exception ex) {
 			System.err.println("NPC saving failed!");
@@ -909,12 +911,14 @@ public class Game implements XMLSaving {
 			Main.game.addEvent(new EventLogEntry("<style='color:"+PresetColour.GENERIC_TERRIBLE.toWebHexString()+";'>Partial Save Fail<b>", "NPC failure"), false);
 		}
 
-		// Add all offspringSeed:
+		// Add all offspringSeed (id-sorted for deterministic save output):
 		try {
-			for(OffspringSeed offspringSeed : Main.game.getOffspringSeedMap().values()) {
+			List<String> offspringSeedIds = new ArrayList<>(Main.game.getOffspringSeedMap().keySet());
+			offspringSeedIds.sort(null);
+			for(String offspringSeedId : offspringSeedIds) {
 				Element characterNode = doc.createElement("OffspringSeed");
 				game.appendChild(characterNode);
-				offspringSeed.saveAsXML(characterNode, doc);
+				Main.game.getOffspringSeedMap().get(offspringSeedId).saveAsXML(characterNode, doc);
 			}
 		} catch(Exception ex) {
 			System.err.println("offspringSeed saving failed!");

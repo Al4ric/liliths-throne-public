@@ -40,14 +40,11 @@ class SaveLoadRoundTripTest {
 		return Files.readString(new File("data/saves/" + name + ".xml").toPath(), StandardCharsets.UTF_8);
 	}
 
-	// Canonical, order-independent view of the save's state lines. Two things are normalized out:
-	//  - the growing "Game loaded" event-log entries (a log, not core state);
-	//  - line ORDER: NPCs are loaded via a parallelStream into a ConcurrentHashMap, so their save
-	//    order varies between loads even though the data is identical. Sorting compares the data itself.
+	// The only expected per-load drift is the growing "Game loaded" event-log entries (a log, not
+	// core state). NPCs/offspring are now saved in id-sorted order, so the rest is byte-stable.
 	private static String canonicalState(String save) {
 		return java.util.Arrays.stream(save.split("\n"))
 				.filter(line -> !line.contains("Game loaded"))
-				.sorted()
 				.collect(java.util.stream.Collectors.joining("\n"));
 	}
 
