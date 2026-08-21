@@ -970,6 +970,15 @@ public class Game implements XMLSaving {
 	}
 	
 	public static void importGame(File file) {
+		importGame(file, true);
+	}
+
+	/**
+	 * Loads a save into game state. When {@code applyDialogueAndEndTurn} is false, the UI-coupled
+	 * presentation tail (setContent + endTurn, which require Main.mainController) is skipped so the
+	 * load can run headlessly — e.g. in tests. Production always passes true.
+	 */
+	public static void importGame(File file, boolean applyDialogueAndEndTurn) {
 		Main.game = new Game();
 		UtilText.initScriptEngine(); // Have to init the script engine before loading game variables as some classes (such as race) call parsing as part of their initialisation (Race's 'applyRaceChanges')
 		
@@ -2192,10 +2201,14 @@ public class Game implements XMLSaving {
 		DialogueNode startingDialogueNode = Main.game.getPlayerCell().getDialogue(false);
 		Main.game.addEvent(new EventLogEntry("[style.colourGood(Game loaded)]", "data/saves/"+Util.getFileName(file)+".xml"), false);
 		Main.game.setStarted(true); // Set started before setting content so that it parses correctly (as the scripting engine is initialised fully in the setStarted() method).
-		Main.game.setContent(new Response("", startingDialogueNode.getDescription(), startingDialogueNode), false);
+		if(applyDialogueAndEndTurn) {
+			Main.game.setContent(new Response("", startingDialogueNode.getDescription(), startingDialogueNode), false);
+		}
 		
 		Main.game.occupancyUtil.updateSlavesResting(Main.game.getHourOfDay()); // Makes sure that resting slaves are correctly accounted for
-		Main.game.endTurn(0);
+		if(applyDialogueAndEndTurn) {
+			Main.game.endTurn(0);
+		}
 		
 		// Do a zero-time status effect update after declaring that the game has started to make sure that everything is initialised properly (mainly just so external status effects are initialised):
 		for(NPC npc : Main.game.getAllNPCs()) {
