@@ -35,7 +35,12 @@ public class Generation extends Task<Boolean> {
 				System.out.println(wt);
 			}
 			try {
-				Main.game.getWorlds().put(wt, worldGeneration(wt));
+				// worldGeneration (image I/O) runs in parallel; only the HashMap insertion is
+				// serialised, since concurrent put() on a plain HashMap can corrupt the table.
+				World generated = worldGeneration(wt);
+				synchronized (Main.game.getWorlds()) {
+					Main.game.getWorlds().put(wt, generated);
+				}
 			} catch (Exception e) {
 				System.err.println("Exception while generating world type! " + wt.getId());
 				e.printStackTrace(System.err);

@@ -2834,112 +2834,42 @@ public class MainController implements Initializable {
 	}
 	
 	
-	// EXPERIMENT: false routes all WebView content through the canonical WebEngine.loadContent(...)
-	// instead of the legacy executeScript("document.write(...)") hack that crashes newer WebKit.
-	private boolean useJavascriptToSetContent = false;
-	
-	private void setWebEngineContent(WebEngine engine, String content) {
-		content=content.replaceAll("[\r\n]", "");
-		content=content.replaceAll("\"", "'");
-		
-		engine.executeScript(
-			"document.open('text/html');"
-			+ "document.write(\""+content+"\");"
-			+"document.close();");
-	}
-	
 	public void setMainContent(String content) {
-		if(useJavascriptToSetContent
-				 // For rendering images from file:
-				&& !Main.game.getCurrentDialogueNode().equals(CharactersPresentDialogue.MENU)
-				&& !Main.game.getCurrentDialogueNode().equals(PhoneDialogue.CONTACTS_CHARACTER)
-				&& !Main.game.getCurrentDialogueNode().equals(CompanionManagement.SLAVE_MANAGEMENT_INSPECT)) {
-			unbindListeners(document);
-			setWebEngineContent(webEngine, content);
-			manageMainListeners();
-		} else {
-			webEngine.loadContent(content);
-		}
+		webEngine.loadContent(content);
 	}
 
 	/**
-	 * Sets the tooltip content, and returns the pixel height
-	 * of the resultant tooltip content.
+	 * Sets the tooltip content.
 	 *
-	 * To calculate height, wraps the content in a #sizing-box
-	 * div, and checks that element's height.
-	 *
-	 * This does not set the tooltip height, but only measures
-	 * the content height. The tooltip must be manually
-	 * resized as needed.
-	 *
-	 * Additionally, this should be called before setting the
-	 * tooltip position, if that requires knowledge of the
-	 * final height.
+	 * <p>Content is loaded canonically via {@link WebEngine#loadContent(String)} (asynchronously),
+	 * so this method does NOT measure or set the tooltip height. Callers must size the tooltip
+	 * themselves via {@link #setTooltipSize(int, int)}.
 	 *
 	 * @param content HTML content to display in the tooltip
-	 * @return the calculated height of the tooltip content
 	 */
-	public int setTooltipContent(String content) {
+	public void setTooltipContent(String content) {
 		if (Main.getProperties().hasValue(PropertyValue.fadeInText)) {
 			content = "<div class='tooltip-animation' style='width: 100%;'>" + content + "</div>";
 		}
-		content = "<div id='sizing-box' style='width: 100%;'>" + content + "</div>";
-		// The tooltip needs its content set synchronously so scrollHeight can be measured on the
-		// next line; loadContent is async (sizing-box would still be null). The other panels use
-		// loadContent, so this write-then-measure on the separate, hidden tooltip webview is safe.
-		setWebEngineContent(webEngineTooltip, content);
-		int height = 0;
-		try {
-			// add 8 + 8 to account for the top + bottom margins
-			height = 16 + (int)Main.mainController.getWebEngineTooltip().executeScript("document.getElementById('sizing-box').scrollHeight");
-		} catch(Exception e) {
-			System.err.println("Failed to locate the tooltip sizing box!");
-			e.printStackTrace();
-		}
+		webEngineTooltip.loadContent(content);
 		TooltipUpdateThread.cancelThreads = true;
 		Main.mainController.getTooltip().hide();
-		return height;
 	}
 	
 	public void setAttributePanelContent(String content) {
-		if(useJavascriptToSetContent) {
-			unbindListeners(documentAttributes);
-			setWebEngineContent(webEngineAttributes, content);
-			manageAttributeListeners();
-		} else {
-			webEngineAttributes.loadContent(content);
-		}
+		webEngineAttributes.loadContent(content);
 	}
 	
 	public void setRightPanelContent(String content) {
-		if(useJavascriptToSetContent) {
-			unbindListeners(documentRight);
-			setWebEngineContent(webEngineRight, content);
-			manageRightListeners();
-		} else {
-			webEngineRight.loadContent(content);
-		}
+		webEngineRight.loadContent(content);
 	}
 	
 	public void setButtonsLeftContent(String content) {
-		if(useJavascriptToSetContent) {
-			unbindListeners(documentButtonsLeft);
-			setWebEngineContent(webEngineButtonsLeft, content);
-			manageButtonLeftListeners();
-		} else {
-			webEngineButtonsLeft.loadContent(content);
-		}
+		webEngineButtonsLeft.loadContent(content);
 	}
 	
 	public void setButtonsRightContent(String content) {
-		if(useJavascriptToSetContent) {
-			unbindListeners(documentButtonsRight);
-			setWebEngineContent(webEngineButtonsRight, content);
-			manageButtonRightListeners();
-		} else {
-			webEngineButtonsRight.loadContent(content);
-		}
+		webEngineButtonsRight.loadContent(content);
 	}
 	
 	private boolean keyEventMatchesBindings(KeyboardAction binding, KeyEvent keyEvent) {

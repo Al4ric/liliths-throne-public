@@ -90,14 +90,23 @@ Heavy work at startup:
 ## 6. Known hotspots & risks
 Performance:
 - Startup dominated by world-gen image I/O + static initializers + Nashorn init.
-- Save load slowed by DOM rescans and the O(n³) loop in `importGame`.
+- Save/load slowed by DOM rescans in `importGame`. (The NPC load itself is already parallelised
+  and backed by a `ConcurrentHashMap`; the per-character nested `getElementsByTagName` chains are
+  bounded to each character's own subtree.)
 - Build slowed by always-clean packaging, single-threaded compile, the shade step, and
   recopying the large `res/` tree.
 
 Memory / correctness:
-- Static unbounded `Game.informationTooltips` map.
-- Listeners added without removal in `controller/FileController.java`.
-- Unbounded colourized-SVG caches in `rendering/SVGImages.java`.
+- `Game.informationTooltips` grows with distinct rendered tooltip ids (mild); risky to LRU-bound
+  since eviction could drop a listener for a tooltip still on screen.
+- `controller/FileController.java` `addEventListener` targets are transient DOM elements that are
+  discarded on the next `WebEngine.loadContent`, so they are not a long-lived leak.
+- Colourized-SVG caches in `rendering/SVGImages.java` are keyed by the finite `Colour` set.
+- FIXED: `world/Generation.java` concurrently `put` into the plain-`HashMap` `Game.worlds` from a
+  `parallelStream` — the insertion is now serialised (image I/O stays parallel).
+- FIXED: `ParserTarget` mutated two plain `HashMap`s from the parallel "Load NPCs" section (only the
+  companion list had been made thread-safe) — maps are now `ConcurrentHashMap` and the mutating
+  methods are `synchronized`.
 - Pervasive `Math.random()` (unseedable) makes exact-output tests fragile — assert invariants.
 
 ## 7. Testing seams (for durable tests)

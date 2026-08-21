@@ -3,9 +3,9 @@ package com.lilithsthrone.game.dialogue.utils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.lilithsthrone.game.character.GameCharacter;
@@ -1574,8 +1574,9 @@ public class ParserTarget {
 	private static List<AbstractParserTarget> coreParserTargets = new ArrayList<>();
 	
 	private static List<AbstractParserTarget> allParserTargets = new CopyOnWriteArrayList<>(); // Need this to be thread safe as it has elements added to it during Game.class's 'Load NPCs' section
-	private static Map<AbstractParserTarget, String> parserTargetToIdMap = new HashMap<>();
-	private static Map<String, AbstractParserTarget> idToParserTargetMap = new HashMap<>();
+	// Thread-safe for the same reason as allParserTargets: mutated concurrently during the parallel 'Load NPCs' section.
+	private static Map<AbstractParserTarget, String> parserTargetToIdMap = new ConcurrentHashMap<>();
+	private static Map<String, AbstractParserTarget> idToParserTargetMap = new ConcurrentHashMap<>();
 
 	public static List<AbstractParserTarget> getAllParserTargets() {
 		return allParserTargets;
@@ -1593,7 +1594,7 @@ public class ParserTarget {
 	/**
 	 * Adds an associated between the tag and the target for parsing.
 	 */
-	public static void addAdditionalParserTarget(String tag, NPC target) {
+	public static synchronized void addAdditionalParserTarget(String tag, NPC target) {
 		AbstractParserTarget newParserTarget = new AbstractParserTarget(Util.newArrayListOfValues(tag), "") {
 			public String getDescription() {
 				return target.getDescription();
@@ -1620,7 +1621,7 @@ public class ParserTarget {
 	/**
 	 * Removes map references to the specified NPC.
 	 */
-	public static void removeAdditionalParserTarget(NPC target) {
+	public static synchronized void removeAdditionalParserTarget(NPC target) {
 		AbstractParserTarget targetToRemove = null;
 		
 		for(AbstractParserTarget parserTarget : allParserTargets) {

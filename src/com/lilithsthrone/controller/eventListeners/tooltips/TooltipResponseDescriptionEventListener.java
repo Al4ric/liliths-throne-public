@@ -253,21 +253,10 @@ public class TooltipResponseDescriptionEventListener implements EventListener {
 					boxHeight+= 28 + ((response.lineHeight()+1)*18);
 				}
 				
-				/* TODO
-				 * Verify that there is no adverse effects to using this method to calculate the tooltip height,
-				 * then remove all boxHeight calculations above, I guess, and apply this method to other
-				 * tooltip types that could use this.
-				 */
-				int realHeight = Main.mainController.setTooltipContent(UtilText.parse(tooltipSB.toString()));
-				
-//				if(false) {
-//					// for every response tooltip, print the height values
-//					// very spammy
-//					System.out.println("predicted: " + boxHeight);
-//					System.out.println("measured:  " + realHeight);
-//				}
-				
-				boxHeight = realHeight;
+				/* Tooltip content is loaded asynchronously (canonical WebEngine.loadContent), so the
+				 * height can no longer be measured synchronously. We use the predicted boxHeight,
+				 * which is how every other tooltip type is already sized. */
+				Main.mainController.setTooltipContent(UtilText.parse(tooltipSB.toString()));
 
 				Main.mainController.setTooltipSize(360, boxHeight);
 				
