@@ -1,7 +1,12 @@
 bin/
 data/
 target/
+dist/
 .*
+# Keep committed dot-dirs that the broad .* rule above would otherwise ignore:
+!.github/
+!.mvn/
+!.gitignore
 *.bak
 *~
 *.old
