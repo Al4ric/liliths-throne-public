@@ -3,7 +3,7 @@
 Builds a self-contained, JDK-free distributable of Lilith's Throne with jpackage.
 
 Output: dist\Lilith's Throne\ containing a native launcher (Lilith's Throne.exe), a bundled
-Java 17 runtime, the shaded app jar, and the res/ assets. The recipient does NOT need Java
+Java 25 runtime, the shaded app jar, and the res/ assets. The recipient does NOT need Java
 installed — just unzip and run the exe. Launch it from its own folder (double-click), since
 the game reads res/ and writes data/ relative to the working directory.
 
@@ -22,8 +22,8 @@ param(
 )
 $ErrorActionPreference = 'Continue'
 Set-Location $PSScriptRoot
-$jdk17 = "$env:USERPROFILE\scoop\apps\temurin17-jdk\current"
-if (-not (Test-Path "$jdk17\bin\jpackage.exe")) { throw "jpackage (JDK 17) not found at $jdk17" }
+$jdk = "$env:USERPROFILE\scoop\apps\temurin25-jdk\current"
+if (-not (Test-Path "$jdk\bin\jpackage.exe")) { throw "jpackage (JDK 25) not found at $jdk" }
 
 # 1. Ensure a shaded jar (rebuild on demand or if missing).
 $jar = Get-ChildItem "target\Lilith's Throne (win)\*.jar" -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -51,8 +51,8 @@ $modules = "java.base,java.desktop,java.datatransfer,java.logging,java.managemen
            "java.net.http,java.prefs,java.rmi,java.scripting,java.xml,jdk.charsets,jdk.dynalink," +
            "jdk.jfr,jdk.jsobject,jdk.localedata,jdk.unsupported,jdk.xml.dom"
 
-$env:JAVA_HOME = $jdk17
-& "$jdk17\bin\jpackage.exe" `
+$env:JAVA_HOME = $jdk
+& "$jdk\bin\jpackage.exe" `
     --type app-image `
     --name "Lilith's Throne" `
     --app-version "0.4.11" `
@@ -62,6 +62,7 @@ $env:JAVA_HOME = $jdk17
     --main-class com.lilithsthrone.Launcher `
     --add-modules $modules `
     --java-options "-XX:+UseParallelGC" `
+    --java-options "--enable-native-access=ALL-UNNAMED" `
     --dest $dist
 if ($LASTEXITCODE -ne 0) { throw "jpackage failed ($LASTEXITCODE)." }
 

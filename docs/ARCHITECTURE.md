@@ -9,7 +9,7 @@ correctness risks live. Pair this with `.github/copilot-instructions.md`.
 ## 1. High-level shape
 Single-module JavaFX desktop application.
 
-- **Language/runtime:** Java (source level 11), built and run on JDK 17. JavaFX for UI,
+- **Language/runtime:** Java (source level 25), built and run on JDK 25 (LTS). JavaFX for UI,
   Nashorn (external `org.openjdk.nashorn`) for the in-content scripting language.
 - **Scale:** ~980 `.java` files under `src/`, ~5,500 asset files under `res/`.
 - **Content-as-data:** most game text, items, clothing, dialogue, encounters and world maps

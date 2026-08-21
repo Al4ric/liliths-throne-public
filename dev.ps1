@@ -2,7 +2,7 @@
 <#
 Fast dev inner-loop for Lilith's Throne. Incrementally compiles ONLY changed sources and runs
 the game straight from classes — no clean, no res/ copy, no shaded fat JAR. Runs in-workspace
-via the Maven Wrapper (./mvnw); no worktree, since the source compiles cleanly on JDK 17.
+via the Maven Wrapper (./mvnw); no worktree, since the source compiles cleanly on JDK 25.
 
 Speed tricks:
   - OFFLINE compile (-o) avoids ~50s of remote metadata re-checks.
@@ -21,11 +21,11 @@ param(
 # Continue (not Stop): native tools (mvn/java) print benign warnings to stderr; we check $LASTEXITCODE explicitly.
 $ErrorActionPreference = 'Continue'
 Set-Location $PSScriptRoot
-$jdk17 = "$env:USERPROFILE\scoop\apps\temurin17-jdk\current"
-if (-not (Test-Path "$jdk17\bin\javac.exe")) { throw "JDK 17 not found at $jdk17" }
+$jdk = "$env:USERPROFILE\scoop\apps\temurin25-jdk\current"
+if (-not (Test-Path "$jdk\bin\javac.exe")) { throw "JDK 25 not found at $jdk" }
 
-$env:JAVA_HOME = $jdk17
-$env:Path = "$jdk17\bin;$env:Path"
+$env:JAVA_HOME = $jdk
+$env:Path = "$jdk\bin;$env:Path"
 $mvnw = "$PSScriptRoot\mvnw.cmd"
 
 # 1. Cache the dependency classpath under target/; regenerate only when pom.xml changes.
@@ -52,4 +52,4 @@ Write-Host ("Incremental compile: {0:N1}s" -f $sw.Elapsed.TotalSeconds)
 if ($NoLaunch) { return }
 
 # 3. Run from classes. `src` serves internal resources; workspace root serves external res/.
-& "$jdk17\bin\java.exe" -Ddebug=true -cp "target\classes;src;$deps" com.lilithsthrone.Launcher
+& "$jdk\bin\java.exe" --enable-native-access=ALL-UNNAMED -Ddebug=true -cp "target\classes;src;$deps" com.lilithsthrone.Launcher

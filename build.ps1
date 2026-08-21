@@ -1,19 +1,19 @@
 #Requires -Version 5.1
 <#
-Builds the shaded release JAR with JDK 17, in-workspace via the Maven Wrapper (./mvnw).
+Builds the shaded release JAR with JDK 25, in-workspace via the Maven Wrapper (./mvnw).
 
 No worktree needed anymore: the Nashorn import is committed as org.openjdk.nashorn and the
-antrun import-swap is gone, so the source compiles cleanly on JDK 17 (VS Code's Java language
+antrun import-swap is gone, so the source compiles cleanly on JDK 25 (VS Code's Java language
 server no longer writes a broken "poison" class).
 #>
 # Continue (not Stop): native tools (mvn/java) print benign warnings to stderr; we check $LASTEXITCODE explicitly.
 $ErrorActionPreference = 'Continue'
 Set-Location $PSScriptRoot
-$jdk17 = "$env:USERPROFILE\scoop\apps\temurin17-jdk\current"
-if (-not (Test-Path "$jdk17\bin\javac.exe")) { throw "JDK 17 not found at $jdk17" }
+$jdk = "$env:USERPROFILE\scoop\apps\temurin25-jdk\current"
+if (-not (Test-Path "$jdk\bin\javac.exe")) { throw "JDK 25 not found at $jdk" }
 
-$env:JAVA_HOME = $jdk17
-$env:Path = "$jdk17\bin;$env:Path"
+$env:JAVA_HOME = $jdk
+$env:Path = "$jdk\bin;$env:Path"
 
 & "$PSScriptRoot\mvnw.cmd" clean package -DskipTests @args
 if ($LASTEXITCODE -ne 0) { throw "Maven build failed ($LASTEXITCODE)." }

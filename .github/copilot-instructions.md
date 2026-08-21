@@ -10,7 +10,7 @@ files). Game text/content lives in `res/**/*.xml` and uses an embedded scripting
 language (`#IF/#ELSEIF/#ELSE` + inline JavaScript) evaluated at runtime by Nashorn.
 
 - Build system: Maven (`pom.xml`) via the **Maven Wrapper** (`./mvnw`), non-standard layout — `<sourceDirectory>src</sourceDirectory>` (no `src/main/java`).
-- Toolchain: build & run on **JDK 17** (Temurin); JDK-17-only (JDK 8 support was dropped). Source level is `release 11`.
+- Toolchain: build & run on **JDK 25** (Temurin LTS); JDK 8 support was dropped, toolchain bumped 17 → 25. Source level is `release 25`.
 - Entry points: `com.lilithsthrone.Launcher` (jar `Main-Class`) → `com.lilithsthrone.main.Main` (JavaFX `Application`).
 
 ## HARD RULES (do not violate)
@@ -22,22 +22,23 @@ language (`#IF/#ELSEIF/#ELSE` + inline JavaScript) evaluated at runtime by Nasho
    planned. Lean on save/load fidelity + invariants + the seedable `Util.random` subset.
 3. **Content scripting is Nashorn.** `UtilText.java` imports `org.openjdk.nashorn.*` directly
    (committed; the old JDK-8 `jdk.nashorn` import + antrun swap were removed when we went
-   JDK-17-only). The `org.openjdk.nashorn:nashorn-core` dependency provides it. Don't reintroduce
+   JDK-17-only). The `org.openjdk.nashorn:nashorn-core` dependency provides it; it runs fine on
+   JDK 25. Don't reintroduce
    the `jdk.nashorn` import.
 4. Keep changes minimal and scoped. No drive-by refactors, no gameplay rebalancing.
 
 ## Build & run workflow
 Everything runs **in-workspace** via the Maven Wrapper (`./mvnw`) — no worktree, no import
-swapping. The thin PowerShell scripts just pin `JAVA_HOME` to JDK 17 and wrap `mvnw`.
+swapping. The thin PowerShell scripts just pin `JAVA_HOME` to JDK 25 and wrap `mvnw`.
 
 - `./build.ps1` — `mvnw clean package`: the shaded release JAR into `target/Lilith's Throne (win)/`.
-- `./run.ps1` — launch the most recently built JAR with JDK 17.
+- `./run.ps1` — launch the most recently built JAR with JDK 25.
 - `./dev.ps1` — FAST inner loop (~3s): incremental offline `compiler:compile` + run straight from `target/classes` (no shade, no res copy). Day-to-day loop.
 - `./test.ps1` — `mvnw test` (the JUnit suite).
 - `./package.ps1` — self-contained distributable via jpackage (`dist/Lilith's Throne/` with a native `.exe` + bundled JRE + res; no JDK needed to run). `-Rebuild` for a fresh jar, `-Zip` for a shareable zip.
 
 Plain `./mvnw test` / `./mvnw package` / `./mvnw javafx:run` also work directly (just ensure
-`JAVA_HOME` points at JDK 17). Use `dev.ps1` while iterating; `build.ps1` produces the shippable JAR.
+`JAVA_HOME` points at JDK 25). Use `dev.ps1` while iterating; `build.ps1` produces the shippable JAR.
 
 ## Resolved: the old Nashorn/worktree gotcha
 - Historically `UtilText.java` shipped a JDK-8 `jdk.nashorn` import, an antrun plugin swapped it

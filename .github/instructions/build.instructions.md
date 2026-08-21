@@ -4,17 +4,19 @@ applyTo: "{pom.xml,build.ps1,run.ps1,test.ps1,dev.ps1,mvnw,mvnw.cmd}"
 # Build instructions — Lilith's Throne
 
 ## Non-negotiables
-- Build & run on **JDK 17** (Temurin). JDK-17-only — JDK 8 support was dropped.
+- Build & run on **JDK 25** (Temurin). JDK-8 support was dropped; the toolchain was bumped
+  17 → 25 (LTS) for newer JIT/GC and language features (`release 25`).
 - `UtilText.java` imports `org.openjdk.nashorn.*` directly (committed). There is NO antrun
   import swap and NO worktree anymore — everything builds in-workspace. Don't reintroduce the
-  `jdk.nashorn` import or the swap.
+  `jdk.nashorn` import or the swap. The standalone `nashorn-core` runs fine on JDK 25.
 - Prefer the Maven Wrapper: `./mvnw` (or the thin `*.ps1` wrappers that pin `JAVA_HOME`).
 
 ## pom.xml facts
 - Non-standard layout: `<sourceDirectory>src</sourceDirectory>`; test sources under `test/`
   via `<testSourceDirectory>`.
-- `maven.compiler.release = 11` (bytecode target), toolchain is JDK 17.
-- JavaFX (`org.openjfx`, platform classifier) and Nashorn (`org.openjdk.nashorn:nashorn-core`)
+- `maven.compiler.release = 25` on JDK 25 (via the `jdk25` profile; `jdk17`/`jdk21` profiles
+  set the matching release when building on those JDKs). Default property fallback is 11.
+- JavaFX (`org.openjfx` 21.x, platform classifier) and Nashorn (`org.openjdk.nashorn:nashorn-core`)
   come from Maven Central (profiles activated on JDK 11+).
 - `res/` is copied into `target/Lilith's Throne (<platform>)/res` during `package`; it is large
   (~5,500 files) — the dev loop deliberately skips it.
@@ -47,4 +49,4 @@ applyTo: "{pom.xml,build.ps1,run.ps1,test.ps1,dev.ps1,mvnw,mvnw.cmd}"
 - `dist/` is gitignored.
 - **macOS / Linux:** jpackage cannot cross-compile. Run the same jpackage invocation ON that OS
   (same `--add-modules`, same shaded jar). It yields a `.app`/`.dmg` on macOS and a directory or
-  `.deb`/`.rpm` on Linux. JavaFX ships inside the shaded jar, so only a JDK 17 with jpackage is needed there.
+  `.deb`/`.rpm` on Linux. JavaFX ships inside the shaded jar, so only a JDK 25 with jpackage is needed there.

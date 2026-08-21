@@ -104,13 +104,7 @@ public class Pathing {
 			}
 		}
 		
-		Queue<Node> openList = new PriorityQueue<>(10, new Comparator<Node>() {
-			@Override
-			// Sort by F value
-			public int compare(Node o1, Node o2) {
-				return o1.getF() - o2.getF();
-			}
-		});
+		Queue<Node> openList = new PriorityQueue<>(10, Comparator.comparingInt(Node::getF));
 		List<Node> closedList = new ArrayList<>();
 
 		// 1)
@@ -417,13 +411,7 @@ public class Pathing {
 //			System.out.println("Added:: "+perkList.get(i).getEntry().getName(null));
 		}
 		
-		Queue<PerkNode> openList = new PriorityQueue<>(10, new Comparator<PerkNode>() {
-			@Override
-			// Sort by F value
-			public int compare(PerkNode o1, PerkNode o2) {
-				return o1.getF() - o2.getF();
-			}
-		});
+		Queue<PerkNode> openList = new PriorityQueue<>(10, Comparator.comparingInt(PerkNode::getF));
 		List<PerkNode> closedList = new ArrayList<>();
 
 		// 1)

@@ -13,8 +13,8 @@ applyTo: "test/**/*.java"
 - Test sources live under `test/` (repo root), configured by `<testSourceDirectory>` in `pom.xml`.
 - Package tests to mirror the class under test (`com.lilithsthrone.<area>`); shared helpers in
   `com.lilithsthrone.testutil`.
-- Run with `./test.ps1` (isolated worktree + JDK 17). This avoids mutating workspace sources
-  via the Nashorn antrun rewrite and dodges the Eclipse JDT poison-class issue.
+- Run with `./test.ps1` (in-workspace via `./mvnw`, JDK 25). No worktree/antrun rewrite anymore
+  (the `org.openjdk.nashorn` import is committed).
 
 ## The JavaFX toolkit
 - Some logic transitively touches JavaFX types and needs the toolkit booted once per JVM.

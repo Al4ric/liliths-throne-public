@@ -1165,11 +1165,9 @@ public class MainController implements Initializable {
 			}
 		};
 
-		actionKeyReleased = new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent event) {
-				if (buttonsPressed.contains(event.getCode())) {
-					buttonsPressed.remove(event.getCode());
-				}
+		actionKeyReleased = event -> {
+			if (buttonsPressed.contains(event.getCode())) {
+				buttonsPressed.remove(event.getCode());
 			}
 		};
 
