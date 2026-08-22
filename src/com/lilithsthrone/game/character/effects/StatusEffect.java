@@ -5683,6 +5683,67 @@ public class StatusEffect {
 		}
 	};
 
+	public static AbstractStatusEffect URINE_PRODUCTION = new AbstractStatusEffect(80,
+			"Urine Production",
+			"urineProduction",
+			PresetColour.GENERIC_SEX,
+			true,
+			null,
+			null) {
+		@Override
+		public String applyEffect(GameCharacter target, int secondsPassed, long totalSecondsPassed) {
+			target.incrementStoredUrine(secondsPassed * target.getUrineRegenerationPerSecond());
+			return "";
+		}
+		@Override
+		public String getDescription(GameCharacter target) {
+			float urineRegenRate = target.getUrineRegenerationPerSecond() * 60;
+
+			return UtilText.parse(target,
+					"[npc.NamePos] bladder is filling up with [npc.urine], at a rate of "+Units.fluid(urineRegenRate)+"/minute."
+					+ " It has stored "+Units.fluid(target.getBladderRawStoredUrineValue())+", out of a maximum of "+Units.fluid(target.getBladderRawUrineStorageValue())+".");
+		}
+		@Override
+		public boolean isConditionsMet(GameCharacter target) {
+			return target.isAbleToUrinate()
+					&& target.getBladderRawUrineStorageValue()>0
+					&& target.getBladderRawStoredUrineValue()<target.getBladderRawUrineStorageValue();
+		}
+		@Override
+		public boolean isSexEffect() {
+			return true;
+		}
+	};
+
+	public static AbstractStatusEffect URINE_FULL = new AbstractStatusEffect(80,
+			"Full Bladder",
+			"urineFull",
+			PresetColour.GENERIC_SEX,
+			true,
+			Util.newHashMapOfValues(),
+			null) {
+		@Override
+		public String applyEffect(GameCharacter target, int secondsPassed, long totalSecondsPassed) {
+			return "";
+		}
+		@Override
+		public String getDescription(GameCharacter target) {
+			return UtilText.parse(target,
+					"[npc.NamePos] bladder is completely full of [npc.urine] ("+Units.fluid(target.getBladderRawUrineStorageValue())+"),"
+					+ " and [npc.she] really needs to relieve [npc.herself].");
+		}
+		@Override
+		public boolean isConditionsMet(GameCharacter target) {
+			return target.isAbleToUrinate()
+					&& target.getBladderRawUrineStorageValue()>0
+					&& target.getBladderRawStoredUrineValue()>=target.getBladderRawUrineStorageValue();
+		}
+		@Override
+		public boolean isSexEffect() {
+			return true;
+		}
+	};
+
 	public static AbstractStatusEffect STRETCHING_ORIFICE = new AbstractStatusEffect(80,
 			"Big Toys",
 			"sexEffects/combinationStretching",

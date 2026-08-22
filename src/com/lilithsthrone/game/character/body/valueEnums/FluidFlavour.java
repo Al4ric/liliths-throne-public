@@ -27,6 +27,11 @@ public enum FluidFlavour {
 			Util.newArrayListOfValues(
 					"sweet")),
 	
+	URINE("urine", PresetColour.URINE,
+			Util.newArrayListOfValues(
+					"bitter",
+					"salty")),
+	
 	FLAVOURLESS("flavourless", PresetColour.BASE_GREY,
 			Util.newArrayListOfValues(
 					"flavourless",

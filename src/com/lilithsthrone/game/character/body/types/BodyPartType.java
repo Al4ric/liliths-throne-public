@@ -51,6 +51,9 @@ public enum BodyPartType {
 	VAGINA("vagina"),
 	GIRL_CUM("girl cum"),
 	
+	// Bladder:
+	URINE("urine"),
+	
 	// Spinneret:
 
 	SPINNERET("spinneret");

@@ -12,6 +12,7 @@ import com.lilithsthrone.game.character.body.FluidCum;
 import com.lilithsthrone.game.character.body.FluidGirlCum;
 import com.lilithsthrone.game.character.body.FluidInterface;
 import com.lilithsthrone.game.character.body.FluidMilk;
+import com.lilithsthrone.game.character.body.FluidUrine;
 import com.lilithsthrone.game.character.body.valueEnums.FluidModifier;
 import com.lilithsthrone.game.character.gender.Gender;
 import com.lilithsthrone.game.character.race.AbstractSubspecies;
@@ -38,6 +39,7 @@ public class FluidStored implements XMLSaving {
 	private FluidCum cum;
 	private FluidMilk milk;
 	private FluidGirlCum girlCum;
+	private FluidUrine urine;
 	private float millilitres;
 	
 	public FluidStored(GameCharacter character, FluidCum cum, float millilitres) {
@@ -151,6 +153,33 @@ public class FluidStored implements XMLSaving {
 		this.millilitres = millilitres;
 	}
 	
+	public FluidStored(String charactersFluidID, FluidUrine urine, float millilitres) {
+		this.charactersFluidID = charactersFluidID;
+
+		this.body = null;
+		this.cumVirile = false;
+		this.virility = 0;
+		try {
+			GameCharacter owner = charactersFluidID==null||charactersFluidID.isEmpty()?null:Main.game.getNPCById(charactersFluidID);
+			this.feral = urine.isFeral(owner);
+		} catch (Exception e) {
+			this.feral = false;
+		}
+
+		this.urine = new FluidUrine(urine.getType());
+		this.urine.clearFluidModifiers();
+
+		this.urine.setFlavour(null, urine.getFlavour());
+		for(FluidModifier fm : urine.getFluidModifiers()) {
+			this.urine.addFluidModifier(null, fm);
+		}
+		for(ItemEffect ie : urine.getTransformativeEffects()) {
+			this.urine.addTransformativeEffect(ie);
+		}
+
+		this.millilitres = millilitres;
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		// Does not take into account quantity on purpose.
@@ -214,6 +243,9 @@ public class FluidStored implements XMLSaving {
 		}
 		if(isGirlCum()) {
 			girlCum.saveAsXML("fluidGirlCum", fluidStoredElement, doc);
+		}
+		if(isUrine()) {
+			urine.saveAsXML("fluidUrine", fluidStoredElement, doc);
 		}
 		
 		return fluidStoredElement;
@@ -281,6 +313,15 @@ public class FluidStored implements XMLSaving {
 				return fluid;
 			}
 			
+			// Urine:
+			if(parentElement.getElementsByTagName("fluidUrine").item(0)!=null) {
+				fluid = new FluidStored(ID, FluidUrine.loadFromXML("fluidUrine", parentElement, doc), millimetres);
+				fluid.feral=feral;
+				fluid.cumVirile = false;
+				fluid.virility=0;
+				return fluid;
+			}
+			
 			// Cum:
 			if(parentElement.getElementsByTagName("cum").item(0)!=null) {
 				AbstractSubspecies subspecies = Subspecies.HUMAN;
@@ -341,12 +382,19 @@ public class FluidStored implements XMLSaving {
 		return girlCum!=null;
 	}
 	
+	public boolean isUrine() {
+		return urine!=null;
+	}
+	
 	public FluidInterface getFluid() {
 		if(isCum()) {
 			return cum;
 		}
 		if(isMilk()) {
 			return milk;
+		}
+		if(isUrine()) {
+			return urine;
 		}
 		return girlCum;
 	}

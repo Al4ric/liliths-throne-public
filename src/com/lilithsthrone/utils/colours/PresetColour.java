@@ -405,6 +405,7 @@ public class PresetColour {
 	public static Colour MILK = new Colour(false, BaseColour.YELLOW_PALE, "pale yellow", Util.newArrayListOfValues("milk", "lactation")) {};
 	public static Colour CUM = new Colour(false, BaseColour.BLUE_PALE, "pale blue", Util.newArrayListOfValues("cum", "cummed")) {};
 	public static Colour GIRLCUM = new Colour(false, BaseColour.PINK_PALE, "pale pink", Util.newArrayListOfValues("girlcum", "gcum")) {};
+	public static Colour URINE = new Colour(false, BaseColour.YELLOW, "yellow", Util.newArrayListOfValues("urine", "piss", "pee")) {};
 
 	public static Colour EGG = new Colour(false, BaseColour.YELLOW_PALE, "pale yellow", Util.newArrayListOfValues("egg")) {};
 	

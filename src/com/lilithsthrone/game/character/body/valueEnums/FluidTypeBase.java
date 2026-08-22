@@ -25,7 +25,11 @@ public enum FluidTypeBase {
 	
 	MILK(Util.newArrayListOfValues("milk"),
 			BodyCoveringType.MILK,
-			PresetColour.MILK);
+			PresetColour.MILK),
+	
+	URINE(Util.newArrayListOfValues("urine", "piss", "pee"),
+			BodyCoveringType.URINE,
+			PresetColour.URINE);
 	
 	private List<String> names;
 	private AbstractBodyCoveringType coveringType;

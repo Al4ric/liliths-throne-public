@@ -48,6 +48,7 @@ import com.lilithsthrone.game.character.body.types.BreastType;
 import com.lilithsthrone.game.character.body.types.EarType;
 import com.lilithsthrone.game.character.body.types.EyeType;
 import com.lilithsthrone.game.character.body.types.FaceType;
+import com.lilithsthrone.game.character.body.types.FluidType;
 import com.lilithsthrone.game.character.body.types.HairType;
 import com.lilithsthrone.game.character.body.types.HornType;
 import com.lilithsthrone.game.character.body.types.LegType;
@@ -156,6 +157,8 @@ public class Body implements XMLSaving {
 	private Wing wing;
 
 	private OrificeSpinneret spinneret;
+	
+	private Bladder bladder;
 	
 	private GenitalArrangement genitalArrangement;
 	
@@ -332,6 +335,8 @@ public class Body implements XMLSaving {
 		
 		calculateRace(null);
 		
+		this.bladder = new Bladder(FluidType.getUrineTypeFromRace(this.getRace()), Bladder.DEFAULT_URINE_STORAGE);
+		
 		coveringsDiscovered.add(getBodyHairCoveringType(this.getRace()));
 	}
 	
@@ -382,6 +387,7 @@ public class Body implements XMLSaving {
 		this.tentacle = new Tentacle(bodyToCopy.tentacle);
 		this.vagina = new Vagina(bodyToCopy.vagina);
 		this.wing = new Wing(bodyToCopy.wing);
+		this.bladder = new Bladder(bodyToCopy.bladder);
 
 		handleAllBodyPartsList();
 		calculateRace(null);
@@ -793,6 +799,15 @@ public class Body implements XMLSaving {
 			XMLUtil.addAttribute(doc, bodyTesticle, "internal", String.valueOf(this.penis.testicle.internal));
 		
 		this.penis.testicle.cum.saveAsXML("cum", parentElement, doc);
+
+		// Bladder:
+		Element bodyBladder = doc.createElement("bladder");
+		parentElement.appendChild(bodyBladder);
+			XMLUtil.addAttribute(doc, bodyBladder, "urineStorage", String.valueOf(this.bladder.urineStorage));
+			XMLUtil.addAttribute(doc, bodyBladder, "storedUrine", String.valueOf(this.bladder.urineStored));
+			XMLUtil.addAttribute(doc, bodyBladder, "urineRegeneration", String.valueOf(this.bladder.urineRegeneration));
+
+		this.bladder.urine.saveAsXML("urine", parentElement, doc);
 
 		// Spinneret:
 		Element bodySpinneret = doc.createElement("spinneret");
@@ -2062,6 +2077,27 @@ public class Body implements XMLSaving {
 			body.setBreastCrotch(importedCrotchBreast);
 		}
 		
+		// **************** Bladder **************** //
+
+		Element bladderElement = (Element)parentElement.getElementsByTagName("bladder").item(0);
+		Bladder importedBladder = new Bladder(FluidType.getUrineTypeFromRace(body.getRace()), Bladder.DEFAULT_URINE_STORAGE);
+		if(bladderElement!=null) {
+			try {
+				importedBladder.urineStorage = Integer.valueOf(bladderElement.getAttribute("urineStorage"));
+			} catch(Exception ex) {
+			}
+			try {
+				importedBladder.urineStored = Float.valueOf(bladderElement.getAttribute("storedUrine"));
+			} catch(Exception ex) {
+			}
+			try {
+				importedBladder.urineRegeneration = Integer.valueOf(bladderElement.getAttribute("urineRegeneration"));
+			} catch(Exception ex) {
+			}
+		}
+		importedBladder.urine = FluidUrine.loadFromXML("urine", parentElement, doc, FluidType.getUrineTypeFromRace(body.getRace()));
+		body.setBladder(importedBladder);
+
 		body.setSubspeciesOverride(importedSubspeciesOverride);
 		body.loadedSubspecies = importedLoadedSubspecies;
 		
@@ -3875,6 +3911,14 @@ public class Body implements XMLSaving {
 	
 	public OrificeSpinneret getSpinneret() {
 		return spinneret;
+	}
+	
+	public Bladder getBladder() {
+		return bladder;
+	}
+	
+	public void setBladder(Bladder bladder) {
+		this.bladder = bladder;
 	}
 	
 	public boolean hasTailSpinneret() {

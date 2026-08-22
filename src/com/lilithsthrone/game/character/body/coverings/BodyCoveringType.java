@@ -855,6 +855,22 @@ public class BodyCoveringType {
 			null) {
 	};
 	
+	public static AbstractBodyCoveringType URINE = new AbstractBodyCoveringType(
+			BodyCoveringCategory.FLUID,
+			"",
+			false,
+			"urine",
+			"urine",
+			Util.newArrayListOfValues(CoveringModifier.FLUID),
+			null,
+			Util.newHashMapOfValues(new Value<>(CoveringPattern.FLUID, 1)),
+			null,
+			Util.newArrayListOfValues(PresetColour.COVERING_YELLOW),
+			PresetColour.fluidCoverings,
+			null,
+			null) {
+	};
+	
 	
 	// Makeup:
 	

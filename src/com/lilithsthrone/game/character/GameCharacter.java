@@ -52,11 +52,13 @@ import com.lilithsthrone.game.character.attributes.ObedienceLevelBasic;
 import com.lilithsthrone.game.character.body.Arm;
 import com.lilithsthrone.game.character.body.Body;
 import com.lilithsthrone.game.character.body.BodyPartInterface;
+import com.lilithsthrone.game.character.body.Bladder;
 import com.lilithsthrone.game.character.body.CoverableArea;
 import com.lilithsthrone.game.character.body.FluidCum;
 import com.lilithsthrone.game.character.body.FluidGirlCum;
 import com.lilithsthrone.game.character.body.FluidInterface;
 import com.lilithsthrone.game.character.body.FluidMilk;
+import com.lilithsthrone.game.character.body.FluidUrine;
 import com.lilithsthrone.game.character.body.Penis;
 import com.lilithsthrone.game.character.body.Testicle;
 import com.lilithsthrone.game.character.body.Vagina;
@@ -30817,6 +30819,115 @@ public abstract class GameCharacter implements XMLSaving {
 	// Transformations:
 	public List<ItemEffect> getCumTransformativeEffects() {
 		return getCurrentPenis().getTesticle().getCum().getTransformativeEffects();
+	}
+	
+	
+	
+	// ------------------------------ Bladder / Urine: ------------------------------ //
+	
+	/** Urine is tied to the genitals: a character can only produce urine if they have a penis or a vagina. */
+	public boolean isAbleToUrinate() {
+		return this.hasPenisIgnoreDildo() || this.hasVagina();
+	}
+	public Bladder getBladder() {
+		return body.getBladder();
+	}
+	// Urine storage (maximum bladder capacity):
+	public int getBladderRawUrineStorageValue() {
+		if(!isAbleToUrinate()) {
+			return 0;
+		}
+		return body.getBladder().getRawUrineStorageValue();
+	}
+	public String setUrineStorage(int urineStorage) {
+		return body.getBladder().setUrineStorage(this, urineStorage);
+	}
+	public String incrementUrineStorage(int increment) {
+		return setUrineStorage(body.getBladder().getRawUrineStorageValue() + increment);
+	}
+	// Stored urine (current bladder contents):
+	public void fillBladderToMaxStorage() {
+		body.getBladder().setStoredUrine(this, body.getBladder().getRawUrineStorageValue(), false);
+	}
+	public boolean isBladderFull() {
+		return isAbleToUrinate() && body.getBladder().getRawStoredUrineValue() >= body.getBladder().getRawUrineStorageValue();
+	}
+	public float getBladderRawStoredUrineValue() {
+		if(!isAbleToUrinate()) {
+			return 0;
+		}
+		return body.getBladder().getRawStoredUrineValue();
+	}
+	public String setStoredUrine(float urine) {
+		return body.getBladder().setStoredUrine(this, urine);
+	}
+	public String setStoredUrine(float urine, boolean withFormatting) {
+		return body.getBladder().setStoredUrine(this, urine, withFormatting);
+	}
+	public String incrementStoredUrine(float increment) {
+		return body.getBladder().setStoredUrine(this, body.getBladder().getRawStoredUrineValue() + increment);
+	}
+	/** Empties the bladder, returning a description of the character voiding whatever urine they had stored. */
+	public String voidBladder() {
+		return body.getBladder().setStoredUrine(this, 0);
+	}
+	// Regeneration:
+	public FluidRegeneration getUrineRegeneration() {
+		return body.getBladder().getUrineRegeneration();
+	}
+	public int getRawUrineRegenerationValue() {
+		return body.getBladder().getRawUrineRegenerationValue();
+	}
+	public float getUrineRegenerationPerSecond() {
+		return body.getBladder().getRawUrineRegenerationValue()/(60*60*24f);
+	}
+	public String setUrineRegeneration(int regenerationValue) {
+		return body.getBladder().setUrineRegeneration(this, regenerationValue);
+	}
+	public String incrementUrineRegeneration(int increment) {
+		return setUrineRegeneration(body.getBladder().getRawUrineRegenerationValue() + increment);
+	}
+	// Urine fluid:
+	public FluidUrine getUrine() {
+		return body.getBladder().getUrine();
+	}
+	public AbstractFluidType getUrineType() {
+		return body.getBladder().getUrine().getType();
+	}
+	public void setUrineType(AbstractFluidType type) {
+		body.getBladder().setType(type);
+	}
+	public String getUrineName() {
+		return body.getBladder().getUrine().getName(this);
+	}
+	// Flavour:
+	public FluidFlavour getUrineFlavour() {
+		return body.getBladder().getUrine().getFlavour();
+	}
+	public String setUrineFlavour(FluidFlavour flavour) {
+		return body.getBladder().getUrine().setFlavour(this, flavour);
+	}
+	// Modifiers:
+	public void clearUrineModifiers() {
+		body.getBladder().getUrine().clearFluidModifiers();
+	}
+	public List<FluidModifier> getUrineModifiers() {
+		List<FluidModifier> list = new ArrayList<>();
+		list.addAll(body.getBladder().getUrine().getFluidModifiers());
+		return list;
+	}
+	public boolean hasUrineModifier(FluidModifier fluidModifier) {
+		return body.getBladder().getUrine().hasFluidModifier(fluidModifier);
+	}
+	public String addUrineModifier(FluidModifier fluidModifier) {
+		return body.getBladder().getUrine().addFluidModifier(this, fluidModifier);
+	}
+	public String removeUrineModifier(FluidModifier fluidModifier) {
+		return body.getBladder().getUrine().removeFluidModifier(this, fluidModifier);
+	}
+	// Transformations:
+	public List<ItemEffect> getUrineTransformativeEffects() {
+		return body.getBladder().getUrine().getTransformativeEffects();
 	}
 	
 	

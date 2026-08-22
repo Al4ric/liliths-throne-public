@@ -609,6 +609,184 @@ public class FluidType {
 			Util.newArrayListOfValues()) {
 	};
 	
+	// Urines:
+	
+	public static AbstractFluidType URINE_HUMAN = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.HUMAN,
+			null,
+			null,
+			Util.newArrayListOfValues(""),
+			Util.newArrayListOfValues(""),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_ANGEL = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.ANGEL,
+			null,
+			null,
+			Util.newArrayListOfValues("angelic"),
+			Util.newArrayListOfValues("angelic"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_DEMON = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.DEMON,
+			null,
+			null,
+			Util.newArrayListOfValues("demonic"),
+			Util.newArrayListOfValues("demonic"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_DOLL = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.DOLL,
+			Util.newArrayListOfValues("doll-"),
+			Util.newArrayListOfValues("doll-"),
+			Util.newArrayListOfValues(""),
+			Util.newArrayListOfValues(""),
+			Util.newArrayListOfValues(
+					FluidModifier.MINERAL_OIL)) {
+		@Override
+		public float getValueModifier() {
+			return 0.25f;
+		}
+	};
+	
+	public static AbstractFluidType URINE_DOG_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.DOG_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("canine"),
+			Util.newArrayListOfValues("canine"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_WOLF_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.WOLF_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("lupine"),
+			Util.newArrayListOfValues("lupine"),
+			Util.newArrayListOfValues(
+					FluidModifier.MUSKY)) {
+	};
+	
+	public static AbstractFluidType URINE_FOX_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.FOX_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("vulpine"),
+			Util.newArrayListOfValues("vulpine"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_CAT_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.CAT_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("feline"),
+			Util.newArrayListOfValues("feline"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_COW_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.COW_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("bovine"),
+			Util.newArrayListOfValues("bovine"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_HORSE_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.HORSE_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("equine"),
+			Util.newArrayListOfValues("equine"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_REINDEER_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.REINDEER_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("reindeer"),
+			Util.newArrayListOfValues("reindeer"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_SQUIRREL_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.SQUIRREL_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("squirrel"),
+			Util.newArrayListOfValues("squirrel"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_RAT_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.RAT_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("rat"),
+			Util.newArrayListOfValues("rat"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_RABBIT_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.RABBIT_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("rabbit"),
+			Util.newArrayListOfValues("rabbit"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_BAT_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.BAT_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("bat"),
+			Util.newArrayListOfValues("bat"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_ALLIGATOR_MORPH = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.ALLIGATOR_MORPH,
+			null,
+			null,
+			Util.newArrayListOfValues("alligator"),
+			Util.newArrayListOfValues("alligator"),
+			Util.newArrayListOfValues()) {
+	};
+	
+	public static AbstractFluidType URINE_HARPY = new AbstractFluidType(FluidTypeBase.URINE,
+			FluidFlavour.URINE,
+			Race.HARPY,
+			null,
+			null,
+			Util.newArrayListOfValues("avian"),
+			Util.newArrayListOfValues("avian"),
+			Util.newArrayListOfValues()) {
+	};
+	
 	
 	private static List<AbstractFluidType> allFluidTypes;
 	private static Map<AbstractFluidType, String> fluidToIdMap = new HashMap<>();
@@ -718,5 +896,17 @@ public class FluidType {
 		}
 		typesMap.put(r, types);
 		return types;
+	}
+	
+	/**
+	 * @return The urine fluid type associated with the supplied race, or {@link #URINE_HUMAN} if the race has no dedicated urine type defined.
+	 */
+	public static AbstractFluidType getUrineTypeFromRace(AbstractRace r) {
+		for(AbstractFluidType type : FluidType.getFluidTypes(r)) {
+			if(type.getBaseType()==FluidTypeBase.URINE) {
+				return type;
+			}
+		}
+		return URINE_HUMAN;
 	}
 }

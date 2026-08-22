@@ -5841,6 +5841,11 @@ public class UtilText {
 				BodyPartType.GIRL_CUM);
 
 		addStandardParsingCommands(
+				Util.newArrayListOfValues("urine", "piss", "pee"),
+				Util.newArrayListOfValues("urines", "pisses", "pees"),
+				BodyPartType.URINE);
+
+		addStandardParsingCommands(
 				Util.newArrayListOfValues("wing"),
 				Util.newArrayListOfValues("wings"),
 				BodyPartType.WING);
@@ -11005,6 +11010,8 @@ public class UtilText {
 				return character.getBody().getVagina();
 			case GIRL_CUM:
 				return character.getBody().getVagina().getGirlcum();
+			case URINE:
+				return character.getBody().getBladder().getUrine();
 			case WING:
 				return character.getBody().getWing();
 			case GENERIC:
